@@ -1,88 +1,87 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from 'react';
 
 /* ──────────────────────────────────────────────
    DATA
    ────────────────────────────────────────────── */
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Services", href: "#services" },
-  { label: "Contact", href: "#contact" },
+  { label: 'About', href: '#about' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Services', href: '#services' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 const stats = [
-  { value: "35+", label: "Years of Excellence" },
-  { value: "12,000+", label: "Units Delivered" },
-  { value: "28", label: "Landmark Projects" },
-  { value: "2.4M", label: "Sqm Developed" },
+  { value: '35+', label: 'Years' },
+  { value: '12,000+', label: 'Units Delivered' },
+  { value: '28', label: 'Projects' },
+  { value: '4', label: 'Cities' },
 ];
 
 const projects = [
   {
-    name: "Graha Sudirman Tower",
-    type: "Grade A Office",
-    location: "Jakarta CBD",
-    detail: "45-storey premium office tower with LEED Gold certification",
+    name: 'Graha Sudirman Tower',
+    type: 'Commercial',
+    location: 'Jakarta',
+    description:
+      'A 42-storey Grade A commercial tower in the heart of Jakarta CBD, featuring smart building systems and LEED Gold certification.',
     image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
   },
   {
-    name: "The Residence Kemang",
-    type: "Luxury Residential",
-    location: "South Jakarta",
-    detail: "200 exclusive units with resort-style amenities",
+    name: 'Prima Gardens',
+    type: 'Residential',
+    location: 'Bandung',
+    description:
+      'An exclusive gated community of 320 contemporary homes surrounded by landscaped gardens and premium recreational facilities.',
     image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
   },
   {
-    name: "Sentosa Hills Township",
-    type: "Integrated Township",
-    location: "Tangerang",
-    detail: "500-hectare master-planned community",
+    name: 'The Meridian',
+    type: 'Mixed-Use',
+    location: 'Surabaya',
+    description:
+      'A landmark mixed-use development integrating luxury residences, retail spaces, and a five-star hotel on 12 hectares.',
     image:
-      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80",
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
   },
 ];
 
 const services = [
   {
-    title: "Property Development",
+    letter: 'D',
+    title: 'Property Development',
     description:
-      "End-to-end development of residential towers, commercial complexes, and master-planned townships that define modern Indonesian living.",
-    iconPath:
-      "M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 7.5h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z",
+      'End-to-end development of residential, commercial, and mixed-use properties. From land acquisition through design, construction, and handover, we deliver projects that exceed expectations.',
   },
   {
-    title: "Construction Management",
+    letter: 'A',
+    title: 'Asset Management',
     description:
-      "Expert oversight from groundbreaking to handover — ensuring quality, safety, and on-time delivery across every project phase.",
-    iconPath:
-      "M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z",
+      'Strategic portfolio management that maximizes property value and investment returns. We maintain the highest standards of operations across all managed assets.',
   },
   {
-    title: "Architecture & Design",
+    letter: 'U',
+    title: 'Urban Planning',
     description:
-      "World-class architectural design that blends aesthetics with functionality, creating landmark spaces that inspire and endure.",
-    iconPath:
-      "M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42",
+      'Master planning of integrated townships and urban districts. We create sustainable, livable communities that balance density with green spaces and amenities.',
   },
   {
-    title: "Asset Management",
+    letter: 'C',
+    title: 'Construction Management',
     description:
-      "Strategic management and optimization of real estate portfolios, maximizing returns while maintaining the highest standards of property care.",
-    iconPath:
-      "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z",
+      'Expert project oversight ensuring quality, safety, and timely delivery. Our construction management team brings decades of experience to every build.',
   },
 ];
 
 const contactInfo = {
   address:
-    "Graha Prima Tower, 25th Floor\nJl. Jenderal Sudirman Kav. 52-53\nJakarta Selatan 12190",
-  phone: "+62 21 5785 1234",
-  email: "info@primagraha.co.id",
+    'Graha Prima Tower, 25th Floor\nJl. Jenderal Sudirman Kav. 52-53\nJakarta Selatan 12190',
+  phone: '+62 21 5785 1234',
+  email: 'info@primagraha.co.id',
 };
 
 /* ──────────────────────────────────────────────
@@ -90,70 +89,42 @@ const contactInfo = {
    ────────────────────────────────────────────── */
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <main className="overflow-x-hidden">
+    <main>
       {/* ═══════════════════════════════════════
-          NAVBAR
+          NAVIGATION
           ═══════════════════════════════════════ */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-white/95 shadow-[0_1px_0_rgba(200,163,95,0.2)] backdrop-blur-md"
-            : "bg-transparent"
-        }`}
+        className="fixed top-0 left-0 right-0 z-50 bg-white shadow-[0_1px_0_rgba(27,58,92,0.08)]"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
-            <a href="#" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center border border-gold bg-navy">
-                <span className="font-[family-name:var(--font-dm-serif)] text-lg text-gold">
-                  PG
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span
-                  className={`font-[family-name:var(--font-dm-serif)] text-lg leading-tight transition-colors duration-300 ${
-                    scrolled ? "text-navy" : "text-white"
-                  }`}
-                >
-                  Prima Graha
-                </span>
-                <span
-                  className={`text-[10px] font-medium uppercase tracking-[0.3em] transition-colors duration-300 ${
-                    scrolled ? "text-gold" : "text-gold-light"
-                  }`}
-                >
-                  Group
-                </span>
-              </div>
+            <a href="#" className="select-none">
+              <span
+                style={{ fontFamily: 'var(--font-heading)' }}
+                className="text-xl font-bold tracking-wide text-navy"
+              >
+                PRIMA GRAHA GROUP
+              </span>
             </a>
 
-            {/* Desktop Links */}
+            {/* Desktop Nav Links */}
             <div className="hidden items-center gap-10 lg:flex">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`text-[13px] font-medium uppercase tracking-[0.15em] transition-colors duration-300 hover:text-gold ${
-                    scrolled ? "text-navy" : "text-white/90"
-                  }`}
+                  className="text-[13px] font-semibold uppercase tracking-[0.12em] text-navy transition-colors duration-200 hover:text-gold"
                 >
                   {link.label}
                 </a>
               ))}
               <a
                 href="#contact"
-                className="border border-gold bg-transparent px-7 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-gold transition-all duration-300 hover:bg-gold hover:text-navy-dark"
+                className="bg-gold px-7 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-200 hover:bg-gold-dark"
               >
                 Get in Touch
               </a>
@@ -166,19 +137,19 @@ export default function Home() {
               aria-label="Toggle menu"
             >
               <span
-                className={`block h-0.5 w-6 transition-all duration-300 ${
-                  scrolled ? "bg-navy" : "bg-white"
-                } ${mobileOpen ? "translate-y-[8px] rotate-45" : ""}`}
+                className={`block h-0.5 w-6 bg-navy transition-all duration-300 ${
+                  mobileOpen ? 'translate-y-2 rotate-45' : ''
+                }`}
               />
               <span
-                className={`block h-0.5 w-6 transition-all duration-300 ${
-                  scrolled ? "bg-navy" : "bg-white"
-                } ${mobileOpen ? "opacity-0" : "opacity-100"}`}
+                className={`block h-0.5 w-6 bg-navy transition-all duration-300 ${
+                  mobileOpen ? 'opacity-0' : ''
+                }`}
               />
               <span
-                className={`block h-0.5 w-6 transition-all duration-300 ${
-                  scrolled ? "bg-navy" : "bg-white"
-                } ${mobileOpen ? "-translate-y-[8px] -rotate-45" : ""}`}
+                className={`block h-0.5 w-6 bg-navy transition-all duration-300 ${
+                  mobileOpen ? '-translate-y-2 -rotate-45' : ''
+                }`}
               />
             </button>
           </div>
@@ -187,16 +158,16 @@ export default function Home() {
         {/* Mobile Menu */}
         <div
           className={`overflow-hidden bg-white transition-all duration-300 lg:hidden ${
-            mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            mobileOpen ? 'max-h-80 border-t border-gray-border' : 'max-h-0'
           }`}
         >
-          <div className="flex flex-col gap-1 px-6 py-4">
+          <div className="flex flex-col px-6 py-4">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="px-3 py-3 text-sm font-medium uppercase tracking-wider text-navy transition-colors hover:text-gold"
+                className="py-3 text-sm font-semibold uppercase tracking-wider text-navy transition-colors hover:text-gold"
               >
                 {link.label}
               </a>
@@ -204,7 +175,7 @@ export default function Home() {
             <a
               href="#contact"
               onClick={() => setMobileOpen(false)}
-              className="mt-2 border border-gold bg-navy py-3 text-center text-sm font-semibold uppercase tracking-wider text-gold"
+              className="mt-3 bg-gold py-3 text-center text-sm font-semibold uppercase tracking-wider text-white"
             >
               Get in Touch
             </a>
@@ -219,176 +190,112 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
-            alt="Modern glass skyscraper"
+            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80"
+            alt="Modern luxury property development"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/90 via-navy/70 to-navy-dark/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/95 via-navy/75 to-transparent" />
         </div>
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-6 lg:px-12">
-          <div className="max-w-2xl py-32">
-            {/* Accent line */}
-            <div className="mb-8 flex items-center gap-4 animate-fade-in">
-              <div className="h-px w-16 bg-gold" />
-              <span className="text-[13px] font-medium uppercase tracking-[0.3em] text-gold">
-                Established 1989
+          <div className="max-w-2xl pt-20">
+            {/* Gold label */}
+            <div className="mb-8 flex items-center gap-4">
+              <div className="h-px w-12 bg-gold" />
+              <span className="text-[13px] font-semibold uppercase tracking-[0.3em] text-gold">
+                EST. 1989
               </span>
             </div>
 
-            <h1 className="font-[family-name:var(--font-dm-serif)] text-4xl leading-[1.1] text-white sm:text-5xl lg:text-7xl animate-fade-in-up">
+            {/* Heading */}
+            <h1
+              style={{ fontFamily: 'var(--font-heading)' }}
+              className="text-4xl leading-[1.1] text-white sm:text-5xl lg:text-7xl"
+            >
               Building
               <br />
-              Indonesia&apos;s{" "}
-              <span className="text-gold">Future</span>
+              Indonesia&apos;s Future
             </h1>
 
-            <p className="mt-8 max-w-lg text-lg leading-relaxed text-white/70 animate-fade-in-up animate-delay-200">
-              For over three decades, Prima Graha Group has shaped
-              Indonesia&apos;s skyline with world-class developments that set
-              new standards for quality, design, and sustainable living.
+            {/* Subtext */}
+            <p className="mt-8 max-w-lg text-lg leading-relaxed text-white/70">
+              For over three decades, Prima Graha Group has shaped Indonesia&apos;s
+              most prestigious addresses. We create landmark developments that set
+              new standards for quality, innovation, and sustainable living.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-6 animate-fade-in-up animate-delay-300">
+            {/* Buttons */}
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
               <a
                 href="#projects"
-                className="inline-flex items-center justify-center bg-gold px-10 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-navy-dark transition-all duration-300 hover:bg-gold-light hover:shadow-lg"
+                className="inline-flex items-center justify-center bg-navy px-10 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-200 hover:bg-navy-light"
               >
-                Explore Projects
-                <svg
-                  className="ml-3 h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
+                Our Projects
               </a>
               <a
                 href="#about"
-                className="inline-flex items-center justify-center border border-white/30 px-10 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-300 hover:border-gold hover:text-gold"
+                className="inline-flex items-center justify-center border-2 border-white/30 px-10 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-200 hover:border-gold hover:text-gold"
               >
                 Learn More
               </a>
             </div>
-
-            {/* Trust badges */}
-            <div className="mt-16 flex items-center gap-8 border-t border-white/10 pt-8 animate-fade-in animate-delay-500">
-              <div className="flex flex-col">
-                <span className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                  A+
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-white/40">
-                  Credit Rating
-                </span>
-              </div>
-              <div className="h-10 w-px bg-white/10" />
-              <div className="flex flex-col">
-                <span className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                  ISO
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-white/40">
-                  9001 Certified
-                </span>
-              </div>
-              <div className="h-10 w-px bg-white/10" />
-              <div className="flex flex-col">
-                <span className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                  IDX
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-white/40">
-                  Listed
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-              Scroll
-            </span>
-            <div className="h-12 w-px bg-gradient-to-b from-gold/60 to-transparent" />
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════
-          ABOUT / INTRODUCTION
+          ABOUT
           ═══════════════════════════════════════ */}
-      <section id="about" className="bg-white py-20 lg:py-32">
+      <section id="about" className="bg-white py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-            {/* Left: Image */}
-            <div className="relative">
-              <div className="aspect-[4/5] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
-                  alt="Luxury modern architecture"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-              </div>
-              {/* Gold accent border */}
-              <div className="absolute -bottom-4 -right-4 -z-10 h-full w-full border-2 border-gold/30" />
-            </div>
-
-            {/* Right: Content */}
+            {/* Left: Content */}
             <div>
               <div className="mb-6 flex items-center gap-4">
                 <div className="h-px w-12 bg-gold" />
-                <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-gold">
+                <span className="text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
                   About Us
                 </span>
               </div>
 
-              <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl leading-tight text-navy lg:text-5xl">
-                A Legacy of
+              <h2
+                style={{ fontFamily: 'var(--font-heading)' }}
+                className="text-3xl leading-tight text-navy lg:text-5xl"
+              >
+                Three Decades
                 <br />
-                Building Excellence
+                of Excellence
               </h2>
 
-              <div className="mt-8 space-y-5 text-base leading-relaxed text-text-muted">
+              <div className="mt-8 space-y-5 text-base leading-relaxed text-gray-text">
                 <p>
                   Founded in 1989, Prima Graha Group has grown from a single
                   residential project in Jakarta into one of Indonesia&apos;s most
-                  respected property developers. Our portfolio spans luxury
-                  residences, Grade A offices, retail destinations, and
-                  integrated townships.
+                  respected integrated property developers. Our portfolio spans
+                  premium residences, Grade A commercial towers, retail
+                  destinations, and master-planned townships across four major
+                  cities.
                 </p>
                 <p>
-                  We believe that exceptional spaces require more than
-                  construction expertise — they demand a deep understanding of
-                  how people live, work, and connect. Every Prima Graha
-                  development is designed with this philosophy at its core.
+                  We believe that exceptional developments require more than
+                  engineering prowess &mdash; they demand a deep understanding of
+                  how people live, work, and aspire. Every Prima Graha project
+                  is guided by our commitment to quality craftsmanship, timeless
+                  design, and environmental responsibility.
                 </p>
               </div>
+            </div>
 
-              {/* Key highlights */}
-              <div className="mt-10 grid grid-cols-2 gap-6 border-t border-gray-100 pt-10">
-                <div>
-                  <p className="font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-navy">
-                    4
-                  </p>
-                  <p className="mt-1 text-sm text-text-muted">
-                    Major Cities Across Indonesia
-                  </p>
-                </div>
-                <div>
-                  <p className="font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-navy">
-                    6
-                  </p>
-                  <p className="mt-1 text-sm text-text-muted">
-                    Industry Awards in 2024
-                  </p>
-                </div>
+            {/* Right: Image with gold left border accent */}
+            <div className="relative">
+              <div className="absolute left-0 top-6 bottom-6 w-1 bg-gold" />
+              <div className="ml-6 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+                  alt="Modern architectural development"
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -396,20 +303,29 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          STATISTICS
+          STATS BAR
           ═══════════════════════════════════════ */}
-      <section className="bg-navy py-20 lg:py-24">
+      <section className="bg-navy py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-white/10">
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center text-center lg:px-8">
-                <span className="font-[family-name:var(--font-space-grotesk)] text-4xl font-bold text-gold sm:text-5xl lg:text-6xl">
+          <div className="grid grid-cols-2 gap-10 lg:grid-cols-4">
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                className="relative flex flex-col items-center text-center"
+              >
+                {/* Gold vertical divider (not on first item) */}
+                {i > 0 && (
+                  <div className="absolute left-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-gold/40 lg:block" />
+                )}
+                <span
+                  style={{ fontFamily: 'var(--font-heading)' }}
+                  className="text-4xl text-white sm:text-5xl"
+                >
                   {stat.value}
                 </span>
-                <div className="mt-3 h-px w-8 bg-gold/30" />
-                <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-white/70">
+                <span className="mt-2 text-[13px] font-semibold uppercase tracking-[0.15em] text-gold">
                   {stat.label}
-                </p>
+                </span>
               </div>
             ))}
           </div>
@@ -419,77 +335,64 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           FEATURED PROJECTS
           ═══════════════════════════════════════ */}
-      <section id="projects" className="bg-light-gray py-20 lg:py-32">
+      <section id="projects" className="bg-gray-bg py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
-          {/* Section header */}
-          <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <div className="mb-6 flex items-center gap-4">
-                <div className="h-px w-12 bg-gold" />
-                <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-gold">
-                  Portfolio
-                </span>
-              </div>
-              <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl text-navy lg:text-5xl">
-                Featured Projects
-              </h2>
+          {/* Header */}
+          <div className="mb-16 text-center">
+            <div className="mb-6 flex items-center justify-center gap-4">
+              <div className="h-px w-12 bg-gold" />
+              <span className="text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
+                Portfolio
+              </span>
+              <div className="h-px w-12 bg-gold" />
             </div>
-            <p className="max-w-md text-base leading-relaxed text-text-muted">
-              From iconic towers to master-planned townships, each project
-              reflects our commitment to excellence and innovation.
-            </p>
+            <h2
+              style={{ fontFamily: 'var(--font-heading)' }}
+              className="text-3xl text-navy lg:text-5xl"
+            >
+              Featured Developments
+            </h2>
           </div>
 
-          {/* Projects grid */}
+          {/* Project Cards */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <div
                 key={project.name}
-                className="group bg-white shadow-sm transition-all duration-500 hover:shadow-xl"
+                className="group overflow-hidden bg-white transition-shadow duration-300 hover:shadow-xl"
               >
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.name}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/30 to-transparent" />
-                  {/* Type badge */}
-                  <div className="absolute left-5 top-5 border border-white/30 bg-navy/80 px-3 py-1 backdrop-blur-sm">
-                    <span className="text-[11px] font-medium uppercase tracking-[0.15em] text-white">
+                </div>
+
+                {/* Gold top border */}
+                <div className="h-1 bg-gold" />
+
+                {/* Info */}
+                <div className="p-6">
+                  <h3
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                    className="text-xl text-navy"
+                  >
+                    {project.name}
+                  </h3>
+                  <div className="mt-2 flex items-center gap-3">
+                    <span className="text-[13px] font-medium text-gray-text">
+                      {project.location}
+                    </span>
+                    <span className="text-gray-border">|</span>
+                    <span className="inline-block border border-gold/30 px-3 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-gold">
                       {project.type}
                     </span>
                   </div>
-                </div>
-
-                {/* Info */}
-                <div className="border-t-2 border-gold p-6">
-                  <h3 className="font-[family-name:var(--font-dm-serif)] text-xl text-navy">
-                    {project.name}
-                  </h3>
-                  <p className="mt-1 text-[13px] font-medium uppercase tracking-wider text-gold">
-                    {project.location}
+                  <p className="mt-4 text-sm leading-relaxed text-gray-text">
+                    {project.description}
                   </p>
-                  <p className="mt-3 text-sm leading-relaxed text-text-muted">
-                    {project.detail}
-                  </p>
-                  <div className="mt-5 flex items-center gap-2 text-[13px] font-semibold text-navy transition-colors duration-300 group-hover:text-gold">
-                    View Project
-                    <svg
-                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </div>
                 </div>
               </div>
             ))}
@@ -500,60 +403,47 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SERVICES
           ═══════════════════════════════════════ */}
-      <section id="services" className="bg-white py-20 lg:py-32">
+      <section id="services" className="bg-white py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
-          {/* Section header */}
+          {/* Header */}
           <div className="mb-16 text-center">
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-gold" />
-              <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-gold">
+              <span className="text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
                 What We Do
               </span>
               <div className="h-px w-12 bg-gold" />
             </div>
-            <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl text-navy lg:text-5xl">
+            <h2
+              style={{ fontFamily: 'var(--font-heading)' }}
+              className="text-3xl text-navy lg:text-5xl"
+            >
               Our Services
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-text-muted">
-              Comprehensive property solutions backed by decades of expertise
-              and an unwavering commitment to quality.
-            </p>
           </div>
 
-          {/* Services grid */}
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {/* Service Cards */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((service) => (
               <div
                 key={service.title}
-                className="group border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-gold/30 hover:shadow-lg"
+                className="group border border-gray-border p-8 transition-all duration-300 hover:border-gold/40 hover:shadow-lg"
               >
-                {/* Icon */}
-                <div className="mb-6 flex h-14 w-14 items-center justify-center border border-gold/20 text-gold transition-all duration-300 group-hover:border-gold group-hover:bg-navy group-hover:text-gold">
-                  <svg
-                    className="h-7 w-7"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d={service.iconPath}
-                    />
-                  </svg>
+                {/* Icon circle with letter */}
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-lg font-bold text-gold">
+                  {service.letter}
                 </div>
 
-                <h3 className="mb-3 font-[family-name:var(--font-dm-serif)] text-lg text-navy">
+                <h3
+                  style={{ fontFamily: 'var(--font-heading)' }}
+                  className="mb-3 text-lg text-navy"
+                >
                   {service.title}
                 </h3>
 
-                <p className="text-sm leading-relaxed text-text-muted">
+                <p className="text-sm leading-relaxed text-gray-text">
                   {service.description}
                 </p>
-
-                {/* Decorative bottom line */}
-                <div className="mt-6 h-0.5 w-0 bg-gold transition-all duration-500 group-hover:w-full" />
               </div>
             ))}
           </div>
@@ -561,81 +451,74 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          VISION BANNER
+          TESTIMONIAL
           ═══════════════════════════════════════ */}
-      <section className="relative py-20 lg:py-32">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80"
-            alt="Luxury modern property"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-navy/85" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12">
+      <section className="bg-navy py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-12">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 flex items-center justify-center gap-4">
-              <div className="h-px w-12 bg-gold/50" />
-              <span className="text-[13px] font-medium uppercase tracking-[0.3em] text-gold">
-                Our Vision
-              </span>
-              <div className="h-px w-12 bg-gold/50" />
-            </div>
+            {/* Gold quotation marks */}
+            <span
+              style={{ fontFamily: 'var(--font-heading)' }}
+              className="text-6xl leading-none text-gold"
+            >
+              &ldquo;
+            </span>
 
-            <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl leading-tight text-white lg:text-5xl">
-              Creating spaces that inspire
-              <span className="text-gold"> generations</span>
-            </h2>
-
-            <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-white/60">
-              We envision a future where every Prima Graha development becomes
-              a cornerstone of its community — blending innovation,
-              sustainability, and timeless design.
+            <p
+              style={{ fontFamily: 'var(--font-heading)' }}
+              className="mt-4 text-2xl leading-relaxed text-white italic lg:text-3xl"
+            >
+              Prima Graha Group doesn&apos;t just build properties &mdash; they
+              create legacies. Their attention to quality and design is unmatched
+              in the Indonesian market. We are proud to have partnered with them
+              on three landmark developments.
             </p>
 
-            <a
-              href="#contact"
-              className="mt-10 inline-flex items-center justify-center bg-gold px-10 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-navy-dark transition-all duration-300 hover:bg-gold-light"
-            >
-              Partner With Us
-            </a>
+            <div className="mt-10">
+              <p className="text-base font-semibold text-white">
+                Ir. Bambang Hartono
+              </p>
+              <p className="mt-1 text-sm text-gold">
+                Chairman, Indonesian Property Association
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════
-          CONTACT / CTA
+          CONTACT
           ═══════════════════════════════════════ */}
-      <section id="contact" className="bg-light-gray py-20 lg:py-32">
+      <section id="contact" className="bg-gray-bg py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
             {/* Left: Info */}
             <div>
               <div className="mb-6 flex items-center gap-4">
                 <div className="h-px w-12 bg-gold" />
-                <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-gold">
+                <span className="text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
                   Contact
                 </span>
               </div>
 
-              <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl text-navy lg:text-5xl">
-                Let&apos;s Build
-                <br />
-                Something Great
+              <h2
+                style={{ fontFamily: 'var(--font-heading)' }}
+                className="text-3xl text-navy lg:text-5xl"
+              >
+                Get in Touch
               </h2>
 
-              <p className="mt-6 max-w-md text-base leading-relaxed text-text-muted">
-                Whether you&apos;re looking for your dream property, exploring
-                investment opportunities, or seeking a development partner,
-                we&apos;d love to hear from you.
+              <p className="mt-6 max-w-md text-base leading-relaxed text-gray-text">
+                Whether you are exploring investment opportunities, seeking your
+                next home, or looking for a development partner, we would be
+                delighted to speak with you.
               </p>
 
-              {/* Contact details */}
+              {/* Contact Details */}
               <div className="mt-10 space-y-6">
                 {/* Address */}
-                <div className="flex gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold/20 text-gold">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy text-white">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -656,18 +539,16 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-navy">
-                      Head Office
-                    </p>
-                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-text-muted">
+                    <p className="text-sm font-semibold text-navy">Head Office</p>
+                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-gray-text">
                       {contactInfo.address}
                     </p>
                   </div>
                 </div>
 
                 {/* Phone */}
-                <div className="flex gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold/20 text-gold">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy text-white">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -684,15 +565,15 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-navy">Phone</p>
-                    <p className="mt-1 text-sm text-text-muted">
+                    <p className="mt-1 text-sm text-gray-text">
                       {contactInfo.phone}
                     </p>
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold/20 text-gold">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy text-white">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -709,7 +590,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-navy">Email</p>
-                    <p className="mt-1 text-sm text-text-muted">
+                    <p className="mt-1 text-sm text-gray-text">
                       {contactInfo.email}
                     </p>
                   </div>
@@ -719,79 +600,79 @@ export default function Home() {
 
             {/* Right: Form */}
             <div className="bg-white p-8 shadow-sm lg:p-12">
-              <h3 className="font-[family-name:var(--font-dm-serif)] text-xl text-navy">
+              <h3
+                style={{ fontFamily: 'var(--font-heading)' }}
+                className="text-xl text-navy"
+              >
                 Send Us a Message
               </h3>
-              <p className="mt-2 text-sm text-text-muted">
-                Fill out the form below and our team will get back to you within
-                24 hours.
+              <p className="mt-2 text-sm text-gray-text">
+                Fill out the form below and our team will respond within 24 hours.
               </p>
 
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   alert(
-                    "Thank you for your inquiry. We will get back to you shortly."
+                    'Thank you for your inquiry. Our team will get back to you shortly.'
                   );
                 }}
                 className="mt-8 space-y-5"
               >
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-2 block text-[13px] font-medium text-navy"
-                    >
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      placeholder="Your name"
-                      className="w-full border border-gray-200 bg-white px-4 py-3 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted/50 focus:border-gold"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="mb-2 block text-[13px] font-medium text-navy"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      placeholder="your@email.com"
-                      className="w-full border border-gray-200 bg-white px-4 py-3 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted/50 focus:border-gold"
-                    />
-                  </div>
-                </div>
-
+                {/* Name */}
                 <div>
                   <label
-                    htmlFor="subject"
+                    htmlFor="name"
                     className="mb-2 block text-[13px] font-medium text-navy"
                   >
-                    Subject
+                    Full Name
                   </label>
-                  <select
-                    id="subject"
-                    name="subject"
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
                     required
-                    className="w-full border border-gray-200 bg-white px-4 py-3 text-sm text-text-primary outline-none transition-colors focus:border-gold"
-                  >
-                    <option value="">Select a subject</option>
-                    <option value="investment">Investment Opportunities</option>
-                    <option value="purchase">Property Purchase</option>
-                    <option value="partnership">Partnership Proposal</option>
-                    <option value="general">General Inquiry</option>
-                  </select>
+                    placeholder="Your full name"
+                    className="w-full border border-gray-border bg-white px-4 py-3 text-sm text-navy outline-none transition-colors placeholder:text-gray-text/40 focus:border-gold"
+                  />
                 </div>
 
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-2 block text-[13px] font-medium text-navy"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="your@email.com"
+                    className="w-full border border-gray-border bg-white px-4 py-3 text-sm text-navy outline-none transition-colors placeholder:text-gray-text/40 focus:border-gold"
+                  />
+                </div>
+
+                {/* Company */}
+                <div>
+                  <label
+                    htmlFor="company"
+                    className="mb-2 block text-[13px] font-medium text-navy"
+                  >
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    placeholder="Your company (optional)"
+                    className="w-full border border-gray-border bg-white px-4 py-3 text-sm text-navy outline-none transition-colors placeholder:text-gray-text/40 focus:border-gold"
+                  />
+                </div>
+
+                {/* Message */}
                 <div>
                   <label
                     htmlFor="message"
@@ -805,28 +686,15 @@ export default function Home() {
                     required
                     rows={5}
                     placeholder="How can we help you?"
-                    className="w-full resize-none border border-gray-200 bg-white px-4 py-3 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted/50 focus:border-gold"
+                    className="w-full resize-none border border-gray-border bg-white px-4 py-3 text-sm text-navy outline-none transition-colors placeholder:text-gray-text/40 focus:border-gold"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-navy px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-gold transition-all duration-300 hover:bg-navy-light sm:w-auto"
+                  className="w-full bg-gold px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-200 hover:bg-gold-dark sm:w-auto"
                 >
                   Send Message
-                  <svg
-                    className="ml-2 inline-block h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                    />
-                  </svg>
                 </button>
               </form>
             </div>
@@ -838,30 +706,20 @@ export default function Home() {
           FOOTER
           ═══════════════════════════════════════ */}
       <footer className="bg-navy-dark">
-        {/* Main Footer */}
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-12 lg:py-20">
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Column 1: Brand */}
-            <div className="lg:col-span-2">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center border border-gold/30 bg-white/5">
-                  <span className="font-[family-name:var(--font-dm-serif)] text-lg text-gold">
-                    PG
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-[family-name:var(--font-dm-serif)] text-lg leading-tight text-white">
-                    Prima Graha
-                  </span>
-                  <span className="text-[10px] font-medium uppercase tracking-[0.3em] text-gold/60">
-                    Group
-                  </span>
-                </div>
-              </div>
-              <p className="max-w-sm text-sm leading-relaxed text-white/50">
-                Indonesia&apos;s trusted property developer, building
+            {/* Column 1: Logo + Description */}
+            <div>
+              <span
+                style={{ fontFamily: 'var(--font-heading)' }}
+                className="text-lg font-bold text-white"
+              >
+                PRIMA GRAHA GROUP
+              </span>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/50">
+                Indonesia&apos;s trusted property developer since 1989. Building
                 world-class residential, commercial, and mixed-use developments
-                since 1989.
+                across the archipelago.
               </p>
             </div>
 
@@ -875,7 +733,7 @@ export default function Home() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="text-sm text-white/50 transition-colors duration-300 hover:text-gold"
+                      className="text-sm text-white/50 transition-colors duration-200 hover:text-gold"
                     >
                       {link.label}
                     </a>
@@ -884,34 +742,41 @@ export default function Home() {
                 <li>
                   <a
                     href="#"
-                    className="text-sm text-white/50 transition-colors duration-300 hover:text-gold"
+                    className="text-sm text-white/50 transition-colors duration-200 hover:text-gold"
                   >
                     Careers
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-white/50 transition-colors duration-300 hover:text-gold"
-                  >
-                    Investor Relations
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Column 3: Contact */}
+            {/* Column 3: Projects */}
             <div>
               <h4 className="mb-6 text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
-                Contact
+                Projects
               </h4>
-              <ul className="space-y-4 text-sm text-white/50">
-                <li>
-                  Graha Prima Tower, 25th Floor
-                  <br />
-                  Jl. Jenderal Sudirman Kav. 52-53
-                  <br />
-                  Jakarta Selatan 12190
+              <ul className="space-y-3">
+                {projects.map((project) => (
+                  <li key={project.name}>
+                    <a
+                      href="#projects"
+                      className="text-sm text-white/50 transition-colors duration-200 hover:text-gold"
+                    >
+                      {project.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: Contact Info */}
+            <div>
+              <h4 className="mb-6 text-[13px] font-semibold uppercase tracking-[0.2em] text-gold">
+                Contact Info
+              </h4>
+              <ul className="space-y-3 text-sm text-white/50">
+                <li className="whitespace-pre-line leading-relaxed">
+                  {contactInfo.address}
                 </li>
                 <li>{contactInfo.phone}</li>
                 <li>{contactInfo.email}</li>
@@ -921,39 +786,25 @@ export default function Home() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/5">
+        <div className="border-t border-white/10">
           <div className="mx-auto max-w-7xl px-6 py-6 lg:px-12">
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
               <p className="text-xs text-white/30">
                 &copy; {new Date().getFullYear()} Prima Graha Group. All rights
                 reserved.
               </p>
-              <div className="flex items-center gap-6">
+              <p className="text-xs text-white/30">
+                Made with{' '}
+                <span className="text-red-400">&hearts;</span> by{' '}
                 <a
-                  href="#"
-                  className="text-xs text-white/30 transition-colors hover:text-white/50"
+                  href="https://creativism.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold transition-colors hover:text-gold-light"
                 >
-                  Privacy Policy
+                  Creativism
                 </a>
-                <a
-                  href="#"
-                  className="text-xs text-white/30 transition-colors hover:text-white/50"
-                >
-                  Terms of Service
-                </a>
-                <span className="text-xs text-white/30">
-                  Made with{" "}
-                  <span className="text-red-400">&hearts;</span> by{" "}
-                  <a
-                    href="https://creativism.id"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gold transition-colors hover:text-gold-light"
-                  >
-                    Creativism
-                  </a>
-                </span>
-              </div>
+              </p>
             </div>
           </div>
         </div>
